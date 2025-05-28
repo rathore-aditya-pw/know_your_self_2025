@@ -1,0 +1,5 @@
+@import "https://static.pw.live/fonts/reddit/font.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
