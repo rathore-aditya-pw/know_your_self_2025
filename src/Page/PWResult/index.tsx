@@ -1,4 +1,4 @@
-import { useSearchParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "../../components/ui/Button";
 import {
   Card,
@@ -34,7 +34,7 @@ import {
 } from "recharts";
 
 const PWResults = () => {
-  const [searchParams] = useSearchParams();
+  // const [searchParams] = useSearchParams();
   const overallScore = 62; // This would come from the quiz results
 
   // Mock data - would come from actual quiz results

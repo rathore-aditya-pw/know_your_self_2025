@@ -40,11 +40,11 @@ import {
 
 const Results = () => {
   const [searchParams] = useSearchParams();
-  const goal = searchParams.get("goal") || "programming";
-  const level = searchParams.get("level") || "beginner";
+  // const goal = searchParams.get("goal") || "programming";
+  // const level = searchParams.get("level") || "beginner";
   const score = parseInt(searchParams.get("score") || "75");
   const total = parseInt(searchParams.get("total") || "100");
-  const answers = searchParams.get("answers")?.split(",").map(Number) || [];
+  // const answers = searchParams.get("answers")?.split(",").map(Number) || [];
 
   const percentage = Math.round((score / total) * 100);
 

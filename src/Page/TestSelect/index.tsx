@@ -1,17 +1,7 @@
 import { useState } from "react";
 
 import { Link } from "react-router-dom";
-import {
-  ArrowLeft,
-  Code,
-  Palette,
-  TrendingUp,
-  Camera,
-  Music,
-  Globe,
-  Briefcase,
-  Heart,
-} from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import {
   Card,
@@ -22,64 +12,64 @@ import {
 } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
 
-const goals = [
-  {
-    id: "programming",
-    name: "Programming",
-    description: "Web development, algorithms, and software engineering",
-    icon: Code,
-    color: "from-blue-500 to-cyan-500",
-  },
-  {
-    id: "design",
-    name: "Design",
-    description: "UI/UX design, graphic design, and visual creativity",
-    icon: Palette,
-    color: "from-purple-500 to-pink-500",
-  },
-  {
-    id: "marketing",
-    name: "Marketing",
-    description: "Digital marketing, SEO, and content strategy",
-    icon: TrendingUp,
-    color: "from-green-500 to-emerald-500",
-  },
-  {
-    id: "photography",
-    name: "Photography",
-    description: "Digital photography, editing, and visual storytelling",
-    icon: Camera,
-    color: "from-orange-500 to-red-500",
-  },
-  {
-    id: "music",
-    name: "Music Production",
-    description: "Audio engineering, composition, and music theory",
-    icon: Music,
-    color: "from-indigo-500 to-purple-500",
-  },
-  {
-    id: "language",
-    name: "Language Learning",
-    description: "Foreign languages, grammar, and communication",
-    icon: Globe,
-    color: "from-teal-500 to-blue-500",
-  },
-  {
-    id: "business",
-    name: "Business Strategy",
-    description: "Entrepreneurship, management, and leadership",
-    icon: Briefcase,
-    color: "from-gray-600 to-gray-800",
-  },
-  {
-    id: "wellness",
-    name: "Health & Wellness",
-    description: "Nutrition, fitness, and mental health",
-    icon: Heart,
-    color: "from-pink-500 to-rose-500",
-  },
-];
+// const goals = [
+//   {
+//     id: "programming",
+//     name: "Programming",
+//     description: "Web development, algorithms, and software engineering",
+//     icon: Code,
+//     color: "from-blue-500 to-cyan-500",
+//   },
+//   {
+//     id: "design",
+//     name: "Design",
+//     description: "UI/UX design, graphic design, and visual creativity",
+//     icon: Palette,
+//     color: "from-purple-500 to-pink-500",
+//   },
+//   {
+//     id: "marketing",
+//     name: "Marketing",
+//     description: "Digital marketing, SEO, and content strategy",
+//     icon: TrendingUp,
+//     color: "from-green-500 to-emerald-500",
+//   },
+//   {
+//     id: "photography",
+//     name: "Photography",
+//     description: "Digital photography, editing, and visual storytelling",
+//     icon: Camera,
+//     color: "from-orange-500 to-red-500",
+//   },
+//   {
+//     id: "music",
+//     name: "Music Production",
+//     description: "Audio engineering, composition, and music theory",
+//     icon: Music,
+//     color: "from-indigo-500 to-purple-500",
+//   },
+//   {
+//     id: "language",
+//     name: "Language Learning",
+//     description: "Foreign languages, grammar, and communication",
+//     icon: Globe,
+//     color: "from-teal-500 to-blue-500",
+//   },
+//   {
+//     id: "business",
+//     name: "Business Strategy",
+//     description: "Entrepreneurship, management, and leadership",
+//     icon: Briefcase,
+//     color: "from-gray-600 to-gray-800",
+//   },
+//   {
+//     id: "wellness",
+//     name: "Health & Wellness",
+//     description: "Nutrition, fitness, and mental health",
+//     icon: Heart,
+//     color: "from-pink-500 to-rose-500",
+//   },
+// ];
 
 const levels = [
   {
@@ -106,7 +96,7 @@ const levels = [
 ];
 
 const TestSelection = () => {
-  const [selectedGoal, setSelectedGoal] = useState<string>("");
+  const [selectedGoal] = useState<string>("");
   const [selectedLevel, setSelectedLevel] = useState<string>("");
 
   return (

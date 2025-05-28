@@ -194,7 +194,7 @@ const Test = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [answers, setAnswers] = useState<number[]>([]);
   const [timeLeft, setTimeLeft] = useState(900); // 15 minutes in seconds
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  // const [isSubmitted, setIsSubmitted] = useState(false);
 
   const questions = questionBank?.[level as keyof typeof questionBank] || [];
 
