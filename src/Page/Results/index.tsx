@@ -37,8 +37,13 @@ import {
   PolarRadiusAxis,
   Radar,
 } from "recharts";
+import { useEffect, useState } from "react";
+
+
+
 
 const Results = () => {
+  const [username, setUsername] = useState('');
   const [searchParams] = useSearchParams();
   // const goal = searchParams.get("goal") || "programming";
   // const level = searchParams.get("level") || "beginner";
@@ -131,16 +136,23 @@ const Results = () => {
       discount: "25% OFF",
     },
   ];
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const nameFromUrl = params.get('username');
+    if (nameFromUrl) {
+      setUsername(nameFromUrl);
+    }
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-gray-50 to-purple-100">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-gray-50 to-brand-100">
       {/* Header */}
-      <header className="bg-white/70 backdrop-blur-sm shadow-sm border-b border-purple-200">
+      <header className="bg-white/70 backdrop-blur-sm shadow-sm border-b border-brand-200">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-800">
-                JEE Performance Analysis
+                User name {username}
               </h1>
               <p className="text-brand-500">
                 Detailed insights to accelerate your preparation
@@ -175,7 +187,7 @@ const Results = () => {
               </CardHeader>
               <CardContent className="text-center">
                 <div className="text-4xl font-bold mb-2">{percentage}%</div>
-                <div className="text-purple-200">
+                <div className="text-brand-200">
                   ({score}/{total} marks)
                 </div>
                 <Badge className="mt-3 bg-white/20 text-white border-white/30">
@@ -188,7 +200,7 @@ const Results = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-purple-200">
+            <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-brand-200">
               <CardHeader className="text-center pb-2">
                 <TrendingUp className="h-8 w-8 mx-auto text-green-600 mb-2" />
                 <CardTitle className="text-lg text-gray-800">
@@ -209,7 +221,7 @@ const Results = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-purple-200">
+            <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-brand-200">
               <CardHeader className="text-center pb-2">
                 <Users className="h-8 w-8 mx-auto text-blue-600 mb-2" />
                 <CardTitle className="text-lg text-gray-800">
@@ -576,10 +588,10 @@ const Results = () => {
           </Card>
 
           {/* Challenge Friend */}
-          <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-purple-200">
+          <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-brand-200">
             <CardContent className="text-center py-8">
               <div className="space-y-4">
-                <Share2 className="h-12 w-12 mx-auto text-purple-600" />
+                <Share2 className="h-12 w-12 mx-auto text-brand-500" />
                 <h3 className="text-xl font-bold text-gray-800">
                   Challenge Your Friends!
                 </h3>
@@ -587,13 +599,13 @@ const Results = () => {
                   See how you stack up against your study group
                 </p>
                 <div className="flex justify-center space-x-4">
-                  <Button className="bg-purple-600 hover:bg-purple-700">
+                  <Button className="text-white bg-brand-500 hover:bg-brand-600">
                     <Share2 className="h-4 w-4 mr-2" />
                     Share Test Link
                   </Button>
                   <Button
                     variant="outline"
-                    className="border-purple-300 text-purple-700 hover:bg-purple-50"
+                    className="border-brand-300 text-brand-600 hover:bg-brand-50"
                   >
                     Create Group Challenge
                   </Button>

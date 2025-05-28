@@ -30,7 +30,7 @@ const Landing = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Target className="h-8 w-8 text-[#5a4bda]" />
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-[#6a5ff0] to-[#4a3cbf] bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-brand-500 to-brand-600 bg-clip-text text-transparent">
               SkillTest Pro
             </h1>
           </div>
@@ -40,7 +40,7 @@ const Landing = () => {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 text-center">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#6a5ff0] via-[#4a3cbf] to-[#3a2bad] bg-clip-text text-transparent">
+          <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-brand-400 via-brand-500 to-brand-600  bg-clip-text text-transparent">
             Discover Your True Potential
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
