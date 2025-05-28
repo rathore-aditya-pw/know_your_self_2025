@@ -142,20 +142,20 @@ const Results = () => {
               <h1 className="text-3xl font-bold text-gray-800">
                 JEE Performance Analysis
               </h1>
-              <p className="text-purple-600">
+              <p className="text-brand-500">
                 Detailed insights to accelerate your preparation
               </p>
             </div>
             <div className="flex space-x-4">
               <Button
                 variant="outline"
-                className="border-purple-300 text-purple-700 hover:bg-purple-50"
+                className="border-brand-500 text-brand-500 hover:bg-brand-50"
               >
                 <Share2 className="h-4 w-4 mr-2" />
                 Challenge Friend
               </Button>
               <Link to="/test-selection">
-                <Button className="bg-purple-600 hover:bg-purple-700">
+                <Button className="bg-brand-500 text-white hover:bg-brand-600">
                   Retake Test
                 </Button>
               </Link>
@@ -168,7 +168,7 @@ const Results = () => {
         <div className="max-w-7xl mx-auto space-y-8">
           {/* Your Score Section */}
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="bg-gradient-to-br from-purple-600 to-purple-700 text-white shadow-xl">
+            <Card className="bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-xl">
               <CardHeader className="text-center pb-2">
                 <Trophy className="h-12 w-12 mx-auto text-yellow-300 mb-2" />
                 <CardTitle className="text-2xl">Your Score</CardTitle>
@@ -232,10 +232,10 @@ const Results = () => {
           </div>
 
           {/* Subject-wise Performance */}
-          <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-purple-200">
+          <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-brand-100">
             <CardHeader>
               <CardTitle className="text-xl flex items-center space-x-2">
-                <BookOpen className="h-6 w-6 text-purple-600" />
+                <BookOpen className="h-6 w-6 text-brand-500" />
                 <span>Subject-wise Performance</span>
               </CardTitle>
             </CardHeader>
@@ -283,10 +283,10 @@ const Results = () => {
 
           {/* Performance Parameters Radar Chart */}
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-purple-200">
+            <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-brand-100">
               <CardHeader>
                 <CardTitle className="text-xl flex items-center space-x-2">
-                  <Target className="h-6 w-6 text-purple-600" />
+                  <Target className="h-6 w-6 text-brand-500" />
                   <span>Performance Parameters</span>
                 </CardTitle>
               </CardHeader>
@@ -300,8 +300,8 @@ const Results = () => {
                       <Radar
                         name="Your Score"
                         dataKey="score"
-                        stroke="#8b5cf6"
-                        fill="#8b5cf6"
+                        stroke="#5A4BDA"
+                        fill="#5A4BDA"
                         fillOpacity={0.3}
                       />
                       <Radar
@@ -317,7 +317,7 @@ const Results = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-purple-200">
+            <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-brand-100">
               <CardHeader>
                 <CardTitle className="text-xl flex items-center space-x-2">
                   <XCircle className="h-6 w-6 text-red-500" />
@@ -357,10 +357,10 @@ const Results = () => {
           </div>
 
           {/* Personalized Roadmap */}
-          <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-purple-200">
+          <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-brand-100">
             <CardHeader>
               <CardTitle className="text-xl flex items-center space-x-2">
-                <ArrowRight className="h-6 w-6 text-purple-600" />
+                <ArrowRight className="h-6 w-6 text-brand-500" />
                 <span>Personalized 7-Day Roadmap</span>
               </CardTitle>
               <CardDescription>
@@ -375,12 +375,12 @@ const Results = () => {
                     className={`p-6 rounded-lg border-2 ${
                       week.free
                         ? "border-green-300 bg-green-50"
-                        : "border-purple-300 bg-purple-50"
+                        : "border-brand-300 bg-brand-50"
                     } relative`}
                   >
                     {!week.free && (
                       <div className="absolute top-4 right-4">
-                        <Badge className="bg-purple-600 text-white">
+                        <Badge className="bg-brand-500 text-white">
                           <Lock className="h-3 w-3 mr-1" />
                           Premium
                         </Badge>
@@ -389,7 +389,7 @@ const Results = () => {
                     <div className="flex items-center space-x-3 mb-4">
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
-                          week.free ? "bg-green-600" : "bg-purple-600"
+                          week.free ? "bg-green-600" : "bg-brand-500"
                         }`}
                       >
                         {week.week}
@@ -464,13 +464,13 @@ const Results = () => {
           </Card>
 
           {/* PW Batch Recommendations */}
-          <Card className="bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-xl">
+          <Card className="bg-gradient-to-r from-brand-500 to-brand-600 text-white shadow-xl">
             <CardHeader>
               <CardTitle className="text-xl flex items-center space-x-2">
                 <Crown className="h-6 w-6 text-yellow-300" />
                 <span>Recommended PW Batches</span>
               </CardTitle>
-              <CardDescription className="text-purple-100">
+              <CardDescription className="text-brand-50">
                 Based on your performance analysis
               </CardDescription>
             </CardHeader>
@@ -501,7 +501,7 @@ const Results = () => {
                             {batch.discount}
                           </Badge>
                         </div>
-                        <p className="text-purple-100">{batch.duration}</p>
+                        <p className="text-brand-50">{batch.duration}</p>
                       </div>
                       <div>
                         <ul className="space-y-2">
@@ -513,7 +513,7 @@ const Results = () => {
                           ))}
                         </ul>
                       </div>
-                      <Button className="w-full bg-white text-purple-600 hover:bg-gray-100">
+                      <Button className="w-full bg-white text-brand-500 hover:bg-gray-100">
                         Enroll Now
                       </Button>
                     </div>
