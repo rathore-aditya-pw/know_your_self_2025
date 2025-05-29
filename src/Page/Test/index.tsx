@@ -48,17 +48,20 @@ const Test = () => {
 
   const fetchQuestions = async () => {
     const response = await axios.get(
-      "https://know-your-self-be.onrender.com/batch-service/v1/test-roadmap/test",
+      "https://stage-api.penpencil.co/batch-service/v1/test-roadmap/test",
       {
         params: {
           exam: cohortDetails?.exam[0],
           class: cohortDetails?.class,
           difficultyLevel: getDifficultiesLevel(level),
         },
+        headers: {
+          Authorization: `Bearer ${cohortDetails?.token}`,
+        },
       }
     );
 
-    const data = response.data;
+    const data = response.data.data;
     setQuestionBank(data);
     setLoading(false);
   };
@@ -144,13 +147,19 @@ const Test = () => {
         : answers;
 
     const submissionRes = await axios.post(
-      "https://know-your-self-be.onrender.com/batch-service/v1/test-roadmap/check-stats",
+      "https://stage-api.penpencil.co/batch-service/v1/test-roadmap/check-stats",
       {
         responses: finalAnswers,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${cohortDetails?.token}`,
+        },
       }
     );
 
-    const submissionData = submissionRes.data;
+    console.log('submissionRes: ', submissionRes);
+    const submissionData = submissionRes.data.data;
 
     sessionStorage.setItem(
       "testSubmission",
@@ -235,11 +244,11 @@ const Test = () => {
           <Card className="bg-white/70 backdrop-blur-sm shadow-lg">
             <CardHeader className="p-4 md:p-6">
               <CardTitle className="text-xl md:text-2xl mb-4">
-                {currentQ.question}
+                {currentQ?.question}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 px-4 md:px-6 pt-0">
-              {currentQ.options.map((option: any, index: number) => (
+              {currentQ?.options.map((option: any, index: number) => (
                 <div
                   key={index}
                   className={`w-full p-2 border border-[#e1e1e1]  cursor-pointer  md:p-6 rounded-md text-left justify-start h-auto ${
