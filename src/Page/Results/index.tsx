@@ -41,7 +41,6 @@ import { useEffect, useState } from "react";
 import { useGetUserDetails } from "../../hooks/useGetUserDetails";
 
 const Results = () => {
-  const [username, setUsername] = useState("");
   const [searchParams] = useSearchParams();
   // const goal = searchParams.get("goal") || "programming";
   // const level = searchParams.get("level") || "beginner";
@@ -133,13 +132,6 @@ const Results = () => {
       discount: "25% OFF",
     },
   ];
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const nameFromUrl = params.get("username");
-    if (nameFromUrl) {
-      setUsername(nameFromUrl);
-    }
-  }, []);
 
   const userDetail = useGetUserDetails();
 
