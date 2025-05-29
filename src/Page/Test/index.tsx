@@ -29,7 +29,6 @@ const Test = () => {
   const [timeLeft, setTimeLeft] = useState(Number(durationInSeconds));
   const cohortDetails = useGetUserDetails();
   const [questions, setQuestionBank] = useState([]);
-  console.log("questions: ", questions);
   // const questions = questionBank?.[level as keyof typeof questionBank] || [];
 
   const getDifficultiesLevel = (level: string) => {
