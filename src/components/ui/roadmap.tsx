@@ -6,6 +6,7 @@ import {
   BookOpen,
   Target,
   Video,
+  Lock,
 } from "lucide-react";
 import Loader from "./loader";
 import { topicVideos } from "../../lib/videos";
@@ -23,6 +24,9 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
   }>({});
 
   const toggleWeek = (weekIndex: number) => {
+    // Only allow toggling for week 1 and week 2 (indices 0 and 1)
+    if (weekIndex > 1) return;
+    
     setExpandedWeeks((prev) =>
       prev.includes(weekIndex)
         ? prev.filter((i) => i !== weekIndex)
@@ -31,8 +35,15 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
   };
 
   const toggleSubject = (weekIndex: number, subjectIndex: number) => {
+    // Only allow toggling for week 1 and week 2
+    if (weekIndex > 1) return;
+    
     const key = `${weekIndex}-${subjectIndex}`;
     setExpandedSubjects((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const isWeekLocked = (weekIndex: number) => {
+    return weekIndex > 1; // Lock weeks after week 1 and week 2
   };
 
   const getGradientColors = (index: number) => {
@@ -191,134 +202,168 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-gray-50 to-white min-h-screen">
       <div className="space-y-6">
-        {roadmapData.map((week: any, weekIndex: number) => (
-          <div
-            key={weekIndex}
-            className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl"
-          >
-            {/* Week Header */}
+        {roadmapData.map((week: any, weekIndex: number) => {
+          const locked = isWeekLocked(weekIndex);
+          
+          return (
             <div
-              onClick={() => toggleWeek(weekIndex)}
-              className={`bg-gradient-to-r ${getGradientColors(
-                weekIndex
-              )} text-white p-6 cursor-pointer transition-all duration-300 hover:shadow-md`}
+              key={weekIndex}
+              className={`bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 ${
+                locked 
+                  ? 'opacity-60 hover:opacity-70' 
+                  : 'hover:shadow-xl'
+              } ${locked ? 'relative' : ''}`}
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-white/20 p-3 rounded-full backdrop-blur-sm">
-                    <Calendar className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-semibold">
-                      Week {week.duration}
-                    </h2>
-                    <p className="text-white/80 text-sm">
-                      {week.focus.length} subject
-                      {week.focus.length > 1 ? "s" : ""} to explore
-                    </p>
+              {/* Lock Overlay */}
+              {locked && (
+                <div className="absolute inset-0 bg-gray-900/20 backdrop-blur-[1px] z-10 flex items-center justify-center">
+                  <div className="bg-white/90 backdrop-blur-sm rounded-full p-4 shadow-lg animate-pulse">
+                    <Lock className="w-8 h-8 text-gray-600 animate-bounce" />
                   </div>
                 </div>
-                <div className="bg-white/20 p-2 rounded-full backdrop-blur-sm transition-transform duration-300">
-                  {expandedWeeks.includes(weekIndex) ? (
-                    <ChevronDown className="w-5 h-5" />
-                  ) : (
-                    <ChevronRight className="w-5 h-5" />
-                  )}
-                </div>
-              </div>
-            </div>
+              )}
 
-            {/* Week Content */}
-            {expandedWeeks.includes(weekIndex) && (
-              <div className="p-6 space-y-4 animate-in slide-in-from-top duration-300">
-                {week.focus.map((subject: any, subjectIndex: number) => {
-                  const subjectName = Object.values(subject)[0];
-                  const topics = subject.topics;
-                  const key = `${weekIndex}-${subjectIndex}`;
-                  const colors = getSubjectColors(weekIndex, subjectIndex);
-
-                  return (
-                    <div
-                      key={key}
-                      className={`${colors.bg} border ${colors.border} rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md`}
-                    >
-                      {/* Subject Header */}
-                      <div
-                        onClick={() => toggleSubject(weekIndex, subjectIndex)}
-                        className={`p-4 cursor-pointer transition-all duration-200 hover:${colors.accent}`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className={`${colors.accent} p-2 rounded-lg`}>
-                              <BookOpen className={`w-5 h-5 ${colors.text}`} />
-                            </div>
-                            <div>
-                              <h3
-                                className={`font-semibold ${colors.text} text-lg`}
-                              >
-                                {subjectName as string}
-                              </h3>
-                              <p className="text-sm text-gray-500">
-                                {topics.length} topic
-                                {topics.length > 1 ? "s" : ""}
-                              </p>
-                            </div>
-                          </div>
-                          <div
-                            className={`${colors.accent} p-1 rounded-full transition-transform duration-300`}
-                          >
-                            {expandedSubjects[key] ? (
-                              <ChevronDown
-                                className={`w-4 h-4 ${colors.text}`}
-                              />
-                            ) : (
-                              <ChevronRight
-                                className={`w-4 h-4 ${colors.text}`}
-                              />
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Topics List */}
-                      {expandedSubjects[key] && (
-                        <div className="px-4 pb-4 animate-in slide-in-from-top duration-200">
-                          <div className="space-y-3">
-                            {topics.map((topic: any, topicIndex: number) => (
-                              <div
-                                key={topicIndex}
-                                className="bg-white rounded-lg p-4 border border-gray-100 hover:border-gray-200 transition-all duration-200 hover:shadow-sm"
-                              >
-                                <div className="flex items-start space-x-3">
-                                  <div className="bg-gradient-to-br from-gray-100 to-gray-200 p-2 rounded-lg mt-0.5">
-                                    <Target className="w-4 h-4 text-gray-600" />
-                                  </div>
-                                  <div className="flex-1">
-                                    <h4
-                                      onClick={() =>
-                                        handleVideoClick(topic?.topic)
-                                      }
-                                      className="font-medium flex items-center cursor-pointer gap-1 text-gray-900 mb-1"
-                                    >
-                                      <Video size={20} /> {topic.topic}
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed">
-                                      {topic.Description}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+              {/* Week Header */}
+              <div
+                onClick={() => toggleWeek(weekIndex)}
+                className={`bg-gradient-to-r ${getGradientColors(
+                  weekIndex
+                )} text-white p-6 transition-all duration-300 ${
+                  locked 
+                    ? 'cursor-not-allowed' 
+                    : 'cursor-pointer hover:shadow-md'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-white/20 p-3 rounded-full backdrop-blur-sm">
+                      {locked ? (
+                        <Lock className="w-6 h-6" />
+                      ) : (
+                        <Calendar className="w-6 h-6" />
                       )}
                     </div>
-                  );
-                })}
+                    <div>
+                      <h2 className="text-xl font-semibold">
+                        Week {week.duration}
+                        {locked && (
+                          <span className="ml-2 text-sm font-normal opacity-80">
+                            (Locked)
+                          </span>
+                        )}
+                      </h2>
+                      <p className="text-white/80 text-sm">
+                        {locked 
+                          ? 'Complete previous weeks to unlock'
+                          : `${week.focus.length} subject${week.focus.length > 1 ? 's' : ''} to explore`
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  <div className="bg-white/20 p-2 rounded-full backdrop-blur-sm transition-transform duration-300">
+                    {locked ? (
+                      <Lock className="w-5 h-5" />
+                    ) : expandedWeeks.includes(weekIndex) ? (
+                      <ChevronDown className="w-5 h-5" />
+                    ) : (
+                      <ChevronRight className="w-5 h-5" />
+                    )}
+                  </div>
+                </div>
               </div>
-            )}
-          </div>
-        ))}
+
+              {/* Week Content */}
+              {expandedWeeks.includes(weekIndex) && !locked && (
+                <div className="p-6 space-y-4 animate-in slide-in-from-top duration-300">
+                  {week.focus.map((subject: any, subjectIndex: number) => {
+                    const subjectName = Object.values(subject)[0];
+                    const topics = subject.topics;
+                    const key = `${weekIndex}-${subjectIndex}`;
+                    const colors = getSubjectColors(weekIndex, subjectIndex);
+
+                    return (
+                      <div
+                        key={key}
+                        className={`${colors.bg} border ${colors.border} rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md`}
+                      >
+                        {/* Subject Header */}
+                        <div
+                          onClick={() => toggleSubject(weekIndex, subjectIndex)}
+                          className={`p-4 cursor-pointer transition-all duration-200 hover:${colors.accent}`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <div className={`${colors.accent} p-2 rounded-lg`}>
+                                <BookOpen className={`w-5 h-5 ${colors.text}`} />
+                              </div>
+                              <div>
+                                <h3
+                                  className={`font-semibold ${colors.text} text-lg`}
+                                >
+                                  {subjectName as string}
+                                </h3>
+                                <p className="text-sm text-gray-500">
+                                  {topics.length} topic
+                                  {topics.length > 1 ? "s" : ""}
+                                </p>
+                              </div>
+                            </div>
+                            <div
+                              className={`${colors.accent} p-1 rounded-full transition-transform duration-300`}
+                            >
+                              {expandedSubjects[key] ? (
+                                <ChevronDown
+                                  className={`w-4 h-4 ${colors.text}`}
+                                />
+                              ) : (
+                                <ChevronRight
+                                  className={`w-4 h-4 ${colors.text}`}
+                                />
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Topics List */}
+                        {expandedSubjects[key] && (
+                          <div className="px-4 pb-4 animate-in slide-in-from-top duration-200">
+                            <div className="space-y-3">
+                              {topics.map((topic: any, topicIndex: number) => (
+                                <div
+                                  key={topicIndex}
+                                  className="bg-white rounded-lg p-4 border border-gray-100 hover:border-gray-200 transition-all duration-200 hover:shadow-sm"
+                                >
+                                  <div className="flex items-start space-x-3">
+                                    <div className="bg-gradient-to-br from-gray-100 to-gray-200 p-2 rounded-lg mt-0.5">
+                                      <Target className="w-4 h-4 text-gray-600" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <h4
+                                        onClick={() =>
+                                          handleVideoClick(topic?.topic)
+                                        }
+                                        className="font-medium flex items-center cursor-pointer gap-1 text-gray-900 mb-1"
+                                      >
+                                        <Video size={20} /> {topic.topic}
+                                      </h4>
+                                      <p className="text-gray-600 text-sm leading-relaxed">
+                                        {topic.Description}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
