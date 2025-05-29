@@ -1,4 +1,3 @@
-import { useSearchParams } from "react-router-dom";
 import { Button } from "../../components/ui/Button";
 import {
   Card,
@@ -63,7 +62,6 @@ const Results = () => {
   useEffect(() => {
     fetchRoadMap();
   }, []);
-  const [searchParams] = useSearchParams();
   const score = testSubmission?.overall?.correctQuestions || 0;
   const total = testSubmission?.availableQuestion || 10;
 
