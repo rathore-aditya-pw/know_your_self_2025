@@ -37,7 +37,6 @@ import {
   PolarRadiusAxis,
   Radar,
 } from "recharts";
-import { useEffect, useState } from "react";
 import { useGetUserDetails } from "../../hooks/useGetUserDetails";
 
 const Results = () => {
