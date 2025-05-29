@@ -41,6 +41,8 @@ import { useEffect } from "react";
 import { useGetTestSubmission } from "../../hooks/useGetTestSubmission";
 // import axios from "axios";
 
+import RoadmapComponent from "../../components/ui/roadmap";
+
 const Results = () => {
   const testSubmission = useGetTestSubmission();
   console.log("testSubmission: ", testSubmission);
@@ -414,107 +416,20 @@ const Results = () => {
           {/* Personalized Roadmap */}
           <Card className="bg-white/70 backdrop-blur-sm shadow-lg border border-brand-100">
             <CardHeader>
-              <CardTitle className="text-xl flex items-center space-x-2">
-                <ArrowRight className="h-6 w-6 text-brand-500" />
-                <span>Personalized 7-Day Roadmap</span>
+              <CardTitle className="text-xl flex items-center">
+                <div className="flex items-center">
+                  <ArrowRight className="h-6 w-6 text-brand-500" />
+                </div>
+                <div className="text-2xl  bg-gradient-to-r from-[#5a4bda] to-blue-600 bg-clip-text text-transparent">
+                  Personalized Roadmap
+                </div>
               </CardTitle>
               <CardDescription>
-                Free for the first week, then unlock premium features
+                Your journey to mastery, week by week
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
-                {weeklyRoadmap.map((week, index) => (
-                  <div
-                    key={index}
-                    className={`p-6 rounded-lg border-2 ${
-                      week.free
-                        ? "border-green-300 bg-green-50"
-                        : "border-brand-300 bg-brand-50"
-                    } relative`}
-                  >
-                    {!week.free && (
-                      <div className="absolute top-1 right-[2px] md:top-4 md:right-4">
-                        <Badge className="bg-brand-500 text-white">
-                          <Lock className="h-3 w-3 mr-1" />
-                          Premium
-                        </Badge>
-                      </div>
-                    )}
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
-                          week.free ? "bg-green-600" : "bg-brand-500"
-                        }`}
-                      >
-                        {week.week}
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-gray-800">
-                          {week.title}
-                        </h3>
-                        <p className="text-sm text-gray-600">{week.focus}</p>
-                      </div>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-4">
-                      <div>
-                        <h4 className="font-semibold text-gray-700 flex items-center space-x-2 mb-2">
-                          <PlayCircle className="h-4 w-4" />
-                          <span>Videos</span>
-                        </h4>
-                        <ul className="space-y-1">
-                          {week.videos.map((video, i) => (
-                            <li
-                              key={i}
-                              className="text-sm text-gray-600 flex items-center space-x-2"
-                            >
-                              <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                              <span>{video}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h4 className="font-semibold text-gray-700 flex items-center space-x-2 mb-2">
-                          <Brain className="h-4 w-4" />
-                          <span>Practice</span>
-                        </h4>
-                        <ul className="space-y-1">
-                          {week.practice.map((practice, i) => (
-                            <li
-                              key={i}
-                              className="text-sm text-gray-600 flex items-center space-x-2"
-                            >
-                              <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                              <span>{practice}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h4 className="font-semibold text-gray-700 flex items-center space-x-2 mb-2">
-                          <FileText className="h-4 w-4" />
-                          <span>Tests</span>
-                        </h4>
-                        <ul className="space-y-1">
-                          {week.tests.map((test, i) => (
-                            <li
-                              key={i}
-                              className="text-sm text-gray-600 flex items-center space-x-2"
-                            >
-                              <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                              <span>{test}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <RoadmapComponent />
             </CardContent>
           </Card>
 
