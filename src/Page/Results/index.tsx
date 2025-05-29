@@ -67,8 +67,8 @@ const Results = () => {
 
   const percentage = Math.round((score / total) * 100);
 
-
   const subjectPerformance = testSubmission?.subjects;
+  console.log("subjectPerformance: ", subjectPerformance);
 
   const performanceParams = Object.entries(testSubmission?.skills)?.reduce(
     (acc: any, data: any) => {
@@ -84,6 +84,7 @@ const Results = () => {
     },
     []
   );
+  console.log("performanceParams: ", performanceParams);
 
   const radarData = performanceParams.map((data: any) => ({
     parameter: data.parameter,
@@ -154,6 +155,10 @@ const Results = () => {
   ];
 
   const userDetail = useGetUserDetails();
+
+  const improvement = performanceParams.filter(
+    (param: any) => param.score < 75
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-gray-50 to-brand-100">
@@ -302,12 +307,18 @@ const Results = () => {
                             <span>
                               Topper Avg: {(data as any)?.topperAccuracy}%
                             </span>
-                            <span className="text-red-500">
-                              Gap:{" "}
-                              {(data as any)?.topperAccuracy -
-                                (data as any)?.accuracy}
-                              %
-                            </span>
+                            {(data as any)?.accuracy < 100 ? (
+                              <span className="text-red-500">
+                                Gap:{" "}
+                                {(data as any)?.topperAccuracy -
+                                  (data as any)?.accuracy}
+                                %
+                              </span>
+                            ) : (
+                              <div className="text-white text-xs flex items-center justify-center rounded-full px-3 bg-green-500">
+                                Awesome
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -363,9 +374,8 @@ const Results = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {performanceParams
-                    .filter((param: any) => param.score < 75)
-                    .map((param: any, index: any) => (
+                  {improvement?.length > 0 ? (
+                    improvement.map((param: any, index: any) => (
                       <div
                         key={index}
                         className="p-4 bg-red-50 rounded-lg border border-red-200"
@@ -384,11 +394,18 @@ const Results = () => {
                         </div>
                         <p className="text-sm text-red-600 mt-2">
                           Focus area -{" "}
-                          {param.score <= 0 ? 100 : 25 - (param.score - 50)}%
-                          improvement needed
+                          {param.score <= 0
+                            ? 100
+                            : 25 - (Math.round(param.score) - 50)}
+                          % improvement needed
                         </p>
                       </div>
-                    ))}
+                    ))
+                  ) : (
+                    <div className="flex h-[200px] justify-center items-center">
+                      Everything looks good as is
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
