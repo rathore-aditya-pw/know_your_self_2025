@@ -47,7 +47,7 @@ const Landing = () => {
           <div className="flex items-center space-x-2">
             <Target className="h-8 w-8 text-[#5a4bda]" />
             <h1 className="text-2xl font-bold bg-gradient-to-r from-brand-500 to-brand-600 bg-clip-text text-transparent">
-              SkillTest Pro
+              PW PrepCatalyst
             </h1>
           </div>
         </div>
