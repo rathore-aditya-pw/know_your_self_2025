@@ -57,15 +57,17 @@ const Landing = () => {
       <section className="container mx-auto px-4 py-20 text-center">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-brand-400 via-brand-500 to-brand-600  bg-clip-text text-transparent">
-            Discover Your True Potential
+            The Truth About Your Prep – Are You On Track?
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Take our comprehensive skill assessment to understand where you
-            stand and get a personalized roadmap to achieve your career goals.
+            This isn’t your usual test — this is PW's Personal Prep Lab to
+            evaluate your readiness and build a personalized step-by-step
+            roadmap to help you become the next topper.
           </p>
           <Link to="/test-selection">
             <Button size="lg" className="cta">
-              Start Your Assessment <ArrowRight className="ml-2 h-5 w-5" />
+              Check My Exam Readiness Now
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
         </div>
@@ -75,13 +77,13 @@ const Landing = () => {
       <section className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h3 className="text-3xl font-bold text-gray-800 mb-6">
-            What is SkillTest Pro?
+            What is PW PrepCatalyst?
           </h3>
           <p className="text-lg text-gray-600 mb-8">
-            SkillTest Pro is an adaptive assessment platform that evaluates your
-            skills across multiple domains. Our scientifically designed tests
-            adapt to your responses, providing accurate insights into your
-            current abilities.
+            PW PrepCatalyst is an advanced adaptive assessment platform built
+            specially for students preparing for competitive exams. It helps you
+            understand exactly where you stand in your preparation journey and
+            gives you a clear, personalized roadmap to improve.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg">
@@ -130,7 +132,7 @@ const Landing = () => {
       <section className="container mx-auto px-4 py-16 bg-white/50 backdrop-blur-sm rounded-3xl my-16">
         <div className="max-w-6xl mx-auto">
           <h3 className="text-3xl font-bold text-gray-800 text-center mb-12">
-            Why Choose SkillTest Pro?
+            Why PW Students Choose SkillTest Pro?
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
@@ -139,27 +141,28 @@ const Landing = () => {
               </div>
               <h4 className="font-bold text-gray-800 mb-2">Adaptive Testing</h4>
               <p className="text-gray-600 text-sm">
-                Questions adjust to your skill level for accurate assessment
+                Questions automatically adjust to your knowledge level for
+                accurate assessment of your actual preparation standard
               </p>
             </div>
             <div className="text-center">
               <div className="bg-gradient-to-r from-[#6a5ff0] to-[#4a3cbf] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <Clock className="h-8 w-8 text-white" />
               </div>
-              <h4 className="font-bold text-gray-800 mb-2">
-                Quick & Efficient
-              </h4>
+              <h4 className="font-bold text-gray-800 mb-2">Quick & Focused</h4>
               <p className="text-gray-600 text-sm">
-                Complete assessment in just 15-20 minutes
+                Complete comprehensive chapter-wise tests in just 15-20 minutes
+                during study breaks
               </p>
             </div>
             <div className="text-center">
               <div className="bg-gradient-to-r from-[#6a5ff0] to-[#4a3cbf] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <BookOpen className="h-8 w-8 text-white" />
               </div>
-              <h4 className="font-bold text-gray-800 mb-2">15+ Domains</h4>
+              <h4 className="font-bold text-gray-800 mb-2">PCM Subjects</h4>
               <p className="text-gray-600 text-sm">
-                Cover Programming, Design, Marketing, and more
+                Cover Physics, Chemistry & Mathematics with chapter-wise
+                breakdown following NCERT and advanced problem patterns
               </p>
             </div>
             <div className="text-center">
@@ -167,10 +170,11 @@ const Landing = () => {
                 <Users className="h-8 w-8 text-white" />
               </div>
               <h4 className="font-bold text-gray-800 mb-2">
-                Industry Validated
+                Top Faculty-Aligned Content
               </h4>
               <p className="text-gray-600 text-sm">
-                Questions curated by industry experts
+                Questions designed by subject experts following Physics Wallah's
+                proven teaching methodology and difficulty standards
               </p>
             </div>
           </div>
@@ -181,7 +185,7 @@ const Landing = () => {
       <section className="container mx-auto px-4 py-16">
         <div className="max-w-6xl mx-auto">
           <h3 className="text-3xl font-bold text-gray-800 text-center mb-12">
-            How It Works
+            How PW PrepCatalyst Works for Your Exam Pre
           </h3>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
@@ -192,8 +196,9 @@ const Landing = () => {
                 Choose Your Goal
               </h4>
               <p className="text-gray-600">
-                Select from 15+ skill domains including Programming, Design,
-                Marketing, Data Science, and more.
+                Select from PCM subjects and specific chapters including
+                Mechanics, Organic Chemistry, Calculus, and more based on your
+                current study schedule.
               </p>
             </div>
             <div className="text-center">
@@ -201,11 +206,12 @@ const Landing = () => {
                 2
               </div>
               <h4 className="text-xl font-bold text-gray-800 mb-4">
-                Take Assessment
+                Take Smart Assessment
               </h4>
               <p className="text-gray-600">
-                Answer 20-25 carefully crafted questions that adapt to your
-                skill level in real-time.
+                Answer carefully designed questions that adapt to your level in
+                real-time, just like solving problems in your PW practice
+                sessions..
               </p>
             </div>
             <div className="text-center">
@@ -213,11 +219,12 @@ const Landing = () => {
                 3
               </div>
               <h4 className="text-xl font-bold text-gray-800 mb-4">
-                Get Your Roadmap
+                Get Your Personalised Roadmap
               </h4>
               <p className="text-gray-600">
-                Receive detailed results with personalized learning
-                recommendations and progress tracking.
+                Receive detailed performance analysis with personalized study
+                recommendations, weak area identification, and progress tracking
+                aligned with your exam timeline.
               </p>
             </div>
           </div>
@@ -384,9 +391,7 @@ const Landing = () => {
                 <div className="grid grid-cols-3 gap-4 mt-6">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-[#5a4bda]">78%</div>
-                    <div className="text-sm text-gray-600">
-                      Technical Skills
-                    </div>
+                    <div className="text-sm text-gray-600">Foundation</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-[#6a5ff0]">92%</div>
@@ -418,7 +423,7 @@ const Landing = () => {
               size="lg"
               className="bg-white text-[#5a4bda] hover:bg-gray-100 px-4 md:px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
-              Start Your Free Assessment
+              Check My Exam Readiness Now
             </Button>
           </Link>
           <div className="flex justify-center items-center space-x-8 mt-8 text-sm opacity-75">

@@ -12,180 +12,11 @@ import { Clock, CheckCircle } from "lucide-react";
 import { Badge } from "../../components/ui/badge";
 import { Progress } from "../../components/ui/progress";
 import axios from "axios";
-
-// Sample questions for different goals and levels
-const questionBank = {
-  //   programming: {
-  beginner: [
-    {
-      question: "What does HTML stand for?",
-      options: [
-        "Hyper Text Markup Language",
-        "High Tech Modern Language",
-        "Home Tool Markup Language",
-        "Hyperlink and Text Markup Language",
-      ],
-      correct: 0,
-    },
-    {
-      question: "Which of the following is NOT a programming language?",
-      options: ["Python", "JavaScript", "HTML", "Java"],
-      correct: 2,
-    },
-    {
-      question: "What is a variable in programming?",
-      options: [
-        "A fixed value",
-        "A container for storing data",
-        "A type of loop",
-        "A function",
-      ],
-      correct: 1,
-    },
-  ],
-  intermediate: [
-    {
-      question: "What is the time complexity of binary search?",
-      options: ["O(n)", "O(log n)", "O(n²)", "O(1)"],
-      correct: 1,
-    },
-    {
-      question:
-        "Which design pattern is used to create objects without specifying their exact class?",
-      options: ["Singleton", "Observer", "Factory", "Decorator"],
-      correct: 2,
-    },
-    {
-      question: "What does REST stand for in web APIs?",
-      options: [
-        "Remote Execution State Transfer",
-        "Representational State Transfer",
-        "Reliable Execution State Transfer",
-        "Resource Execution State Transfer",
-      ],
-      correct: 1,
-    },
-  ],
-  advanced: [
-    {
-      question:
-        "What is the primary benefit of using microservices architecture?",
-      options: [
-        "Faster development",
-        "Better scalability and maintainability",
-        "Reduced cost",
-        "Simpler deployment",
-      ],
-      correct: 1,
-    },
-    {
-      question: "In functional programming, what is a pure function?",
-      options: [
-        "A function without side effects",
-        "A function that returns the same output for the same input",
-        "A function with no external dependencies",
-        "All of the above",
-      ],
-      correct: 3,
-    },
-    {
-      question: "What is the CAP theorem in distributed systems?",
-      options: [
-        "Consistency, Availability, Partition tolerance",
-        "Concurrency, Atomicity, Performance",
-        "Caching, Authentication, Performance",
-        "Consistency, Atomicity, Performance",
-      ],
-      correct: 0,
-    },
-  ],
-  //   },
-  //   design: {
-  //     beginner: [
-  //       {
-  //         question: "What are the primary colors?",
-  //         options: [
-  //           "Red, Blue, Yellow",
-  //           "Red, Green, Blue",
-  //           "Red, Blue, Green",
-  //           "Yellow, Blue, Green",
-  //         ],
-  //         correct: 0,
-  //       },
-  //       {
-  //         question: "What does UX stand for?",
-  //         options: [
-  //           "User Experience",
-  //           "User Extension",
-  //           "Universal Experience",
-  //           "User Expert",
-  //         ],
-  //         correct: 0,
-  //       },
-  //       {
-  //         question: "Which software is commonly used for vector graphics?",
-  //         options: ["Photoshop", "Illustrator", "Premiere", "After Effects"],
-  //         correct: 1,
-  //       },
-  //     ],
-  //     intermediate: [
-  //       {
-  //         question: "What is the golden ratio approximately?",
-  //         options: ["1.414", "1.618", "1.732", "2.000"],
-  //         correct: 1,
-  //       },
-  //       {
-  //         question: "What is a wireframe in UX design?",
-  //         options: [
-  //           "A high-fidelity mockup",
-  //           "A low-fidelity structural blueprint",
-  //           "A color palette",
-  //           "A typography guide",
-  //         ],
-  //         correct: 1,
-  //       },
-  //       {
-  //         question: "Which color model is used for print design?",
-  //         options: ["RGB", "CMYK", "HSB", "LAB"],
-  //         correct: 1,
-  //       },
-  //     ],
-  //     advanced: [
-  //       {
-  //         question: "What is the difference between serif and sans-serif fonts?",
-  //         options: [
-  //           "Serif fonts have decorative strokes",
-  //           "Sans-serif fonts are more readable",
-  //           "Serif fonts are older",
-  //           "All of the above",
-  //         ],
-  //         correct: 3,
-  //       },
-  //       {
-  //         question: "What is the 60-30-10 rule in color theory?",
-  //         options: [
-  //           "A rule for font sizes",
-  //           "A color proportion guideline",
-  //           "A spacing rule",
-  //           "A contrast ratio",
-  //         ],
-  //         correct: 1,
-  //       },
-  //       {
-  //         question: "What is progressive disclosure in UX design?",
-  //         options: [
-  //           "Revealing information gradually",
-  //           "Using progressive web apps",
-  //           "Implementing gradual loading",
-  //           "Progressive color schemes",
-  //         ],
-  //         correct: 0,
-  //       },
-  //     ],
-  //   },
-};
+import { useGetUserDetails } from "../../hooks/useGetUserDetails";
+import Loader from "../../components/ui/loader";
 
 const Test = () => {
+  const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const goal = searchParams.get("goal") || "";
@@ -196,16 +27,42 @@ const Test = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [answers, setAnswers] = useState<number[]>([]);
   const [timeLeft, setTimeLeft] = useState(Number(durationInSeconds));
+  const cohortDetails = useGetUserDetails();
+  const [questions, setQuestionBank] = useState([]);
+  console.log("questions: ", questions);
+  // const questions = questionBank?.[level as keyof typeof questionBank] || [];
 
-  const questions = questionBank?.[level as keyof typeof questionBank] || [];
+  const getDifficultiesLevel = (level: string) => {
+    switch (level) {
+      case "beginner":
+        return "easy";
+      case "intermediate":
+        return "medium";
+      case "advanced":
+        return "hard";
+
+      default:
+        return "easy";
+    }
+  };
 
   const fetchQuestions = async () => {
     const response = await axios.get(
-      "https://6aa2-2401-4900-1cd7-7f78-e9d0-624b-1cb8-23f6.ngrok-free.app/test-mettle/get-roadmap"
+      "https://know-your-self-be.onrender.com/batch-service/v1/test-roadmap/test",
+      {
+        params: {
+          exam: cohortDetails?.exam[0],
+          class: cohortDetails?.class,
+          difficultyLevel: getDifficultiesLevel(level),
+        },
+      }
     );
 
     const data = response.data;
+    console.log("response: ", response);
     console.log("data: ", data);
+    setQuestionBank(data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -214,7 +71,7 @@ const Test = () => {
 
   useEffect(() => {
     if (questions.length === 0) {
-      navigate("/test-selection");
+      // navigate("/test-selection");
       return;
     }
 
@@ -229,7 +86,7 @@ const Test = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [questions.length, navigate]);
+  }, [questions, navigate]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -279,7 +136,7 @@ const Test = () => {
           ]
         : answers;
     const score = finalAnswers.reduce((acc, answer, index) => {
-      return acc + (answer === questions[index]?.correct ? 1 : 0);
+      return acc + (answer === (questions[index] as any)?.correct ? 1 : 0);
     }, 0);
 
     navigate(
@@ -289,7 +146,19 @@ const Test = () => {
     );
   };
 
-  if (questions.length === 0) {
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 flex items-center justify-center">
+        <div className="text-center flex flex-col gap-1 items-center">
+          <Loader />
+          <span className="text-xl">Preparing your Test...</span>
+        </div>
+      </div>
+    );
+  }
+
+  console.log("questions: ", questions);
+  if (questions.length === 0 && !loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 flex items-center justify-center">
         <div className="text-center">
@@ -304,7 +173,8 @@ const Test = () => {
     );
   }
 
-  const currentQ = questions[currentQuestion];
+  const currentQ: any = questions[currentQuestion];
+  console.log("questions: ", questions);
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   return (
@@ -350,7 +220,7 @@ const Test = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 px-4 md:px-6 pt-0">
-              {currentQ.options.map((option, index) => (
+              {currentQ.options.map((option: any, index: number) => (
                 <div
                   key={index}
                   className={`w-full p-2 border border-[#e1e1e1]  cursor-pointer  md:p-6 rounded-md text-left justify-start h-auto ${

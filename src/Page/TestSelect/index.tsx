@@ -16,15 +16,15 @@ const levels = [
   {
     id: "beginner",
     name: "Beginner",
-    description: "Just starting out or have basic knowledge",
+    description: "Just Started the Preparation",
     duration: "15 minutes",
-    questions: "20 questions",
+    questions: "15 questions",
     durationInSeconds: 900,
   },
   {
     id: "intermediate",
     name: "Intermediate",
-    description: "Have some experience and want to level up",
+    description: "Have learnt some topics and have practiced",
     duration: "25 minutes",
     questions: "30 questions",
     durationInSeconds: 1500,
@@ -32,9 +32,9 @@ const levels = [
   {
     id: "advanced",
     name: "Advanced",
-    description: "Experienced and looking for expert validation",
+    description: "Have learnt almost all topics and have practiced",
     duration: "35 minutes",
-    questions: "40 questions",
+    questions: "45 questions",
     durationInSeconds: 2100,
   },
 ];
