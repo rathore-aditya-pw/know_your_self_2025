@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "../../components/ui/Button";
-
+import  "./styles.css";
 const Landing = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-gray-50 to-purple-100">
@@ -50,7 +50,7 @@ const Landing = () => {
           <Link to="/test-selection">
             <Button
               size="lg"
-              className="bg-gradient-to-r from-[#6a5ff0] to-[#4a3cbf] hover:from-[#5a4bda] hover:to-[#3a2bad] text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="cta"
             >
               Start Your Assessment <ArrowRight className="ml-2 h-5 w-5" />
             </Button>

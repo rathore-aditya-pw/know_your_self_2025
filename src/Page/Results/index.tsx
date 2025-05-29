@@ -163,11 +163,6 @@ const Results = () => {
                 <Share2 className="h-4 w-4 mr-2" />
                 Challenge Friend
               </Button>
-              <Link to="/test-selection">
-                <Button className="bg-brand-500 text-white hover:bg-brand-600">
-                  Retake Test
-                </Button>
-              </Link>
             </div>
           </div>
         </div>
@@ -388,7 +383,7 @@ const Results = () => {
                     } relative`}
                   >
                     {!week.free && (
-                      <div className="absolute top-4 right-4">
+                      <div className="absolute top-1 right-[2px] md:top-4 md:right-4">
                         <Badge className="bg-brand-500 text-white">
                           <Lock className="h-3 w-3 mr-1" />
                           Premium

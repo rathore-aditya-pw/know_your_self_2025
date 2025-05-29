@@ -266,7 +266,7 @@ const PWResults = () => {
                   className="bg-white/70 backdrop-blur-sm shadow-lg border-0 relative overflow-hidden"
                 >
                   {batch.popular && (
-                    <div className="absolute top-4 right-4">
+                    <div className="absolute top-1 right-[2px] md:top-4 md:right-4">
                       <Badge className="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
                         <Star className="h-3 w-3 mr-1" />
                         Most Popular
