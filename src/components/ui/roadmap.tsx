@@ -167,8 +167,7 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
     const directMatch = (topicVideos as any)[topic];
 
     if (directMatch) {
-      console.log("Exact match found:", directMatch);
-      return directMatch;
+      window.open(directMatch, "_blank", "noopener,noreferrer");
     }
 
     const lowerTopic = topic.toLowerCase();
@@ -178,14 +177,13 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
 
     if (bestMatch) {
       console.log("Partial match found:", bestMatch[1]);
-      return bestMatch[1];
+      window.open(bestMatch[1], "_blank", "noopener,noreferrer");
     }
 
     const videoLinks = Object.values(topicVideos);
     const randomLink =
       videoLinks[Math.floor(Math.random() * videoLinks.length)];
 
-    console.log("randomLink: ", randomLink);
     window.open(randomLink, "_blank", "noopener,noreferrer");
   };
 
