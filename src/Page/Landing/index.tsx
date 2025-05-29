@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   CheckCircle,
   Target,
@@ -21,8 +21,24 @@ import {
 } from "lucide-react";
 
 import { Button } from "../../components/ui/Button";
-import  "./styles.css";
+import "./styles.css";
+import { useEffect } from "react";
+import { Base64 } from "../../lib/enodeUtilities";
 const Landing = () => {
+  const [searchParams] = useSearchParams();
+  const info = searchParams?.get("info");
+
+  useEffect(() => {
+    try {
+      if (info) {
+        const decodedInfo = Base64.decode(info);
+        sessionStorage.setItem("info", decodedInfo);
+        window.location.href = "/";
+      }
+    } catch (err) {
+      console.log("err: ", err);
+    }
+  }, []);
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-gray-50 to-purple-100">
       {/* Header */}
@@ -48,10 +64,7 @@ const Landing = () => {
             stand and get a personalized roadmap to achieve your career goals.
           </p>
           <Link to="/test-selection">
-            <Button
-              size="lg"
-              className="cta"
-            >
+            <Button size="lg" className="cta">
               Start Your Assessment <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>

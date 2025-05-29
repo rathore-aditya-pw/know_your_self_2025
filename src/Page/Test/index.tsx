@@ -11,6 +11,7 @@ import {
 import { Clock, CheckCircle } from "lucide-react";
 import { Badge } from "../../components/ui/badge";
 import { Progress } from "../../components/ui/progress";
+import axios from "axios";
 
 // Sample questions for different goals and levels
 const questionBank = {
@@ -195,9 +196,21 @@ const Test = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [answers, setAnswers] = useState<number[]>([]);
   const [timeLeft, setTimeLeft] = useState(Number(durationInSeconds));
-  // const [isSubmitted, setIsSubmitted] = useState(false);
 
   const questions = questionBank?.[level as keyof typeof questionBank] || [];
+
+  const fetchQuestions = async () => {
+    const response = await axios.get(
+      "https://6aa2-2401-4900-1cd7-7f78-e9d0-624b-1cb8-23f6.ngrok-free.app/test-mettle/get-roadmap"
+    );
+
+    const data = response.data;
+    console.log("data: ", data);
+  };
+
+  useEffect(() => {
+    fetchQuestions();
+  }, []);
 
   useEffect(() => {
     if (questions.length === 0) {

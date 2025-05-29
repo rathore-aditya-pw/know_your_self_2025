@@ -38,6 +38,7 @@ import {
   Radar,
 } from "recharts";
 import { useEffect, useState } from "react";
+import { useGetUserDetails } from "../../hooks/useGetUserDetails";
 
 const Results = () => {
   const [username, setUsername] = useState("");
@@ -140,6 +141,8 @@ const Results = () => {
     }
   }, []);
 
+  const userDetail = useGetUserDetails();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-gray-50 to-brand-100">
       {/* Header */}
@@ -148,7 +151,7 @@ const Results = () => {
           <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-800">
-                User name {username}
+                {userDetail?.username}
               </h1>
               <p className="text-brand-500">
                 Detailed insights to accelerate your preparation
