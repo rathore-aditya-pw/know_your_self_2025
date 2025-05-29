@@ -26,7 +26,7 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
   const toggleWeek = (weekIndex: number) => {
     // Only allow toggling for week 1 and week 2 (indices 0 and 1)
     if (weekIndex > 1) return;
-    
+
     setExpandedWeeks((prev) =>
       prev.includes(weekIndex)
         ? prev.filter((i) => i !== weekIndex)
@@ -37,7 +37,7 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
   const toggleSubject = (weekIndex: number, subjectIndex: number) => {
     // Only allow toggling for week 1 and week 2
     if (weekIndex > 1) return;
-    
+
     const key = `${weekIndex}-${subjectIndex}`;
     setExpandedSubjects((prev) => ({ ...prev, [key]: !prev[key] }));
   };
@@ -185,7 +185,8 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
     const randomLink =
       videoLinks[Math.floor(Math.random() * videoLinks.length)];
 
-    window.open(randomLink, "_blank");
+    console.log("randomLink: ", randomLink);
+    window.open(randomLink, "_blank", "noopener,noreferrer");
   };
 
   if (isLoading) {
@@ -204,15 +205,13 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
       <div className="space-y-6">
         {roadmapData.map((week: any, weekIndex: number) => {
           const locked = isWeekLocked(weekIndex);
-          
+
           return (
             <div
               key={weekIndex}
               className={`bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 ${
-                locked 
-                  ? 'opacity-60 hover:opacity-70' 
-                  : 'hover:shadow-xl'
-              } ${locked ? 'relative' : ''}`}
+                locked ? "opacity-60 hover:opacity-70" : "hover:shadow-xl"
+              } ${locked ? "relative" : ""}`}
             >
               {/* Lock Overlay */}
               {locked && (
@@ -229,9 +228,9 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
                 className={`bg-gradient-to-r ${getGradientColors(
                   weekIndex
                 )} text-white p-6 transition-all duration-300 ${
-                  locked 
-                    ? 'cursor-not-allowed' 
-                    : 'cursor-pointer hover:shadow-md'
+                  locked
+                    ? "cursor-not-allowed"
+                    : "cursor-pointer hover:shadow-md"
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -253,10 +252,11 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
                         )}
                       </h2>
                       <p className="text-white/80 text-sm">
-                        {locked 
-                          ? 'Complete previous weeks to unlock'
-                          : `${week.focus.length} subject${week.focus.length > 1 ? 's' : ''} to explore`
-                        }
+                        {locked
+                          ? "Complete previous weeks to unlock"
+                          : `${week.focus.length} subject${
+                              week.focus.length > 1 ? "s" : ""
+                            } to explore`}
                       </p>
                     </div>
                   </div>
@@ -293,8 +293,12 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
-                              <div className={`${colors.accent} p-2 rounded-lg`}>
-                                <BookOpen className={`w-5 h-5 ${colors.text}`} />
+                              <div
+                                className={`${colors.accent} p-2 rounded-lg`}
+                              >
+                                <BookOpen
+                                  className={`w-5 h-5 ${colors.text}`}
+                                />
                               </div>
                               <div>
                                 <h3
