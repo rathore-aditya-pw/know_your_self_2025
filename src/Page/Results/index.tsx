@@ -39,9 +39,12 @@ import {
 } from "recharts";
 import { useGetUserDetails } from "../../hooks/useGetUserDetails";
 import { useEffect } from "react";
+import { useGetTestSubmission } from "../../hooks/useGetTestSubmission";
 // import axios from "axios";
 
 const Results = () => {
+  const testSubmission = useGetTestSubmission();
+  console.log("testSubmission: ", testSubmission);
   const fetchRoadMap = async () => {
     // const res = await axios.post(
     //   "https://6aa2-2401-4900-1cd7-7f78-e9d0-624b-1cb8-23f6.ngrok-free.app/test-mettle/get-roadmap",
@@ -61,30 +64,33 @@ const Results = () => {
     fetchRoadMap();
   }, []);
   const [searchParams] = useSearchParams();
-  const score = parseInt(searchParams.get("score") || "75");
-  const total = parseInt(searchParams.get("total") || "100");
+  const score = testSubmission?.overall?.correctQuestions || 0;
+  const total = testSubmission?.availableQuestion || 10;
 
   const percentage = Math.round((score / total) * 100);
 
-  const subjectPerformance = [
-    { subject: "Physics", score: 78, topperAvg: 92, color: "#8b5cf6" },
-    { subject: "Chemistry", score: 72, topperAvg: 88, color: "#06b6d4" },
-    { subject: "Mathematics", score: 80, topperAvg: 95, color: "#10b981" },
-  ];
 
-  const performanceParams = [
-    { parameter: "Concept Clarity", score: 75, maxScore: 100 },
-    { parameter: "Theoretical Knowledge", score: 82, maxScore: 100 },
-    { parameter: "Problem Solving", score: 70, maxScore: 100 },
-    { parameter: "Application Skills", score: 68, maxScore: 100 },
-    { parameter: "Speed & Accuracy", score: 65, maxScore: 100 },
-    { parameter: "Formula Retention", score: 85, maxScore: 100 },
-  ];
+  const subjectPerformance = testSubmission?.subjects;
 
-  const radarData = performanceParams.map((param) => ({
-    parameter: param.parameter.split(" ")[0],
-    score: param.score,
-    topperAvg: param.score + 15,
+  const performanceParams = Object.entries(testSubmission?.skills)?.reduce(
+    (acc: any, data: any) => {
+      return [
+        ...acc,
+        {
+          parameter: data[0],
+          maxScore: 100,
+          score: data[1].accuracy,
+          topperAvgTime: data[1].topperAccuracy,
+        },
+      ];
+    },
+    []
+  );
+
+  const radarData = performanceParams.map((data: any) => ({
+    parameter: data.parameter,
+    score: data.score,
+    topperAvg: data.topperAvgTime,
   }));
 
   const weeklyRoadmap = [
@@ -239,7 +245,10 @@ const Results = () => {
                 </div>
                 <div className="flex justify-between text-xs text-gray-500">
                   <span>You: {percentage}%</span>
-                  <span>Toppers: 90%</span>
+                  <span>
+                    Toppers:{" "}
+                    {Math.round(testSubmission?.overall?.topperAccuracy)}%
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -255,42 +264,58 @@ const Results = () => {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-3 gap-6">
-                {subjectPerformance.map((subject, index) => (
-                  <div key={index} className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold text-gray-800 flex items-center space-x-2">
-                        {subject.subject === "Physics" && (
-                          <Zap className="h-4 w-4" />
-                        )}
-                        {subject.subject === "Chemistry" && (
-                          <Atom className="h-4 w-4" />
-                        )}
-                        {subject.subject === "Mathematics" && (
-                          <Calculator className="h-4 w-4" />
-                        )}
-                        <span>{subject.subject}</span>
-                      </h3>
-                      <Badge
-                        variant={subject.score >= 75 ? "default" : "secondary"}
-                      >
-                        {subject.score}%
-                      </Badge>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span>Your Score</span>
-                        <span>{subject.score}%</span>
+                {Object.entries(subjectPerformance).map(
+                  ([subject, data], index) => {
+                    return (
+                      <div key={index} className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-semibold text-gray-800 flex items-center space-x-2">
+                            {subject === "physics" && (
+                              <Zap className="h-4 w-4" />
+                            )}
+                            {subject === "chemistry" && (
+                              <Atom className="h-4 w-4" />
+                            )}
+                            {subject === "Mathematics" && (
+                              <Calculator className="h-4 w-4" />
+                            )}
+                            <span className="uppercase">{subject}</span>
+                          </h3>
+                          <Badge
+                            variant={
+                              (data as any)?.accuracy >= 75
+                                ? "default"
+                                : "secondary"
+                            }
+                          >
+                            {(data as any)?.accuracy}%
+                          </Badge>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span>Your Score</span>
+                            <span>{(data as any)?.accuracy}%</span>
+                          </div>
+                          <Progress
+                            value={(data as any)?.accuracy}
+                            className="h-2"
+                          />
+                          <div className="flex justify-between text-sm text-gray-500">
+                            <span>
+                              Topper Avg: {(data as any)?.topperAccuracy}%
+                            </span>
+                            <span className="text-red-500">
+                              Gap:{" "}
+                              {(data as any)?.topperAccuracy -
+                                (data as any)?.accuracy}
+                              %
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                      <Progress value={subject.score} className="h-2" />
-                      <div className="flex justify-between text-sm text-gray-500">
-                        <span>Topper Avg: {subject.topperAvg}%</span>
-                        <span className="text-red-500">
-                          Gap: {subject.topperAvg - subject.score}%
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                    );
+                  }
+                )}
               </div>
             </CardContent>
           </Card>
@@ -341,8 +366,8 @@ const Results = () => {
               <CardContent>
                 <div className="space-y-4">
                   {performanceParams
-                    .filter((param) => param.score < 75)
-                    .map((param, index) => (
+                    .filter((param: any) => param.score < 75)
+                    .map((param: any, index: any) => (
                       <div
                         key={index}
                         className="p-4 bg-red-50 rounded-lg border border-red-200"
@@ -360,8 +385,9 @@ const Results = () => {
                           </span>
                         </div>
                         <p className="text-sm text-red-600 mt-2">
-                          Focus area - {25 - (param.score - 50)}% improvement
-                          needed
+                          Focus area -{" "}
+                          {param.score <= 0 ? 100 : 25 - (param.score - 50)}%
+                          improvement needed
                         </p>
                       </div>
                     ))}

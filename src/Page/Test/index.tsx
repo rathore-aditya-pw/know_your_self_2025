@@ -17,6 +17,7 @@ import Loader from "../../components/ui/loader";
 
 const Test = () => {
   const [loading, setLoading] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const goal = searchParams.get("goal") || "";
@@ -24,7 +25,7 @@ const Test = () => {
   const durationInSeconds = searchParams.get("duration") || 900;
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<any>(null);
   const [answers, setAnswers] = useState<number[]>([]);
   const [timeLeft, setTimeLeft] = useState(Number(durationInSeconds));
   const cohortDetails = useGetUserDetails();
@@ -58,8 +59,6 @@ const Test = () => {
     );
 
     const data = response.data;
-    console.log("response: ", response);
-    console.log("data: ", data);
     setQuestionBank(data);
     setLoading(false);
   };
@@ -93,8 +92,12 @@ const Test = () => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const handleAnswerSelect = (answerIndex: number) => {
-    setSelectedAnswer(answerIndex);
+  const handleAnswerSelect = (answer: string, questionId: string) => {
+    setSelectedAnswer({
+      selectedOption: answer,
+      questionId,
+      timeTaken: Number(durationInSeconds) - timeLeft,
+    });
   };
 
   const handleNextQuestion = () => {
@@ -119,9 +122,14 @@ const Test = () => {
     }
   };
 
-  const handleSubmitTest = () => {
+  const handleSubmitTest = async () => {
+    if (isSubmitted) {
+      return;
+    }
+    setIsSubmitted(true);
     if (selectedAnswer !== null) {
       const newAnswers = [...answers];
+      console.log("newAnswers: ", newAnswers);
       newAnswers[currentQuestion] = selectedAnswer;
       setAnswers(newAnswers);
     }
@@ -134,15 +142,25 @@ const Test = () => {
             ...answers.slice(currentQuestion + 1),
           ]
         : answers;
-    const score = finalAnswers.reduce((acc, answer, index) => {
-      return acc + (answer === (questions[index] as any)?.correct ? 1 : 0);
-    }, 0);
 
-    navigate(
-      `/results?goal=${goal}&level=${level}&score=${score}&total=${
-        questions.length
-      }&answers=${finalAnswers.join(",")}`
+    const submissionRes = await axios.post(
+      "https://know-your-self-be.onrender.com/batch-service/v1/test-roadmap/check-stats",
+      {
+        responses: finalAnswers,
+      }
     );
+
+    const submissionData = submissionRes.data;
+
+    sessionStorage.setItem(
+      "testSubmission",
+      JSON.stringify({
+        ...submissionData,
+        availableQuestion: questions.length,
+      })
+    );
+    navigate(`/results`);
+    setIsSubmitted(false);
   };
 
   if (loading) {
@@ -156,7 +174,6 @@ const Test = () => {
     );
   }
 
-  console.log("questions: ", questions);
   if (questions.length === 0 && !loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 flex items-center justify-center">
@@ -173,7 +190,6 @@ const Test = () => {
   }
 
   const currentQ: any = questions[currentQuestion];
-  console.log("questions: ", questions);
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   return (
@@ -198,7 +214,11 @@ const Test = () => {
                   {formatTime(timeLeft)}
                 </span>
               </div>
-              <Button variant="outline" onClick={handleSubmitTest}>
+              <Button
+                disabled={isSubmitted}
+                variant="outline"
+                onClick={handleSubmitTest}
+              >
                 Submit Test
               </Button>
             </div>
@@ -210,8 +230,8 @@ const Test = () => {
       </header>
 
       {/* Question Content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
+      <div className="container  mx-auto px-4 py-8">
+        <div className="max-w-4xl relative mx-auto">
           <Card className="bg-white/70 backdrop-blur-sm shadow-lg">
             <CardHeader className="p-4 md:p-6">
               <CardTitle className="text-xl md:text-2xl mb-4">
@@ -223,21 +243,21 @@ const Test = () => {
                 <div
                   key={index}
                   className={`w-full p-2 border border-[#e1e1e1]  cursor-pointer  md:p-6 rounded-md text-left justify-start h-auto ${
-                    selectedAnswer === index
+                    selectedAnswer?.selectedOption === option
                       ? "bg-[#5a4bda] hover:bg-[#4a3cbf] text-white"
                       : "hover:bg-[#ebe9fd]"
                   }`}
-                  onClick={() => handleAnswerSelect(index)}
+                  onClick={() => handleAnswerSelect(option, currentQ?._id)}
                 >
                   <div className="flex items-center space-x-3">
                     <div
                       className={`w-5 h-5 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center ${
-                        selectedAnswer === index
+                        selectedAnswer?.selectedOption === option
                           ? "border-white bg-white"
                           : "border-gray-400"
                       }`}
                     >
-                      {selectedAnswer === index && (
+                      {selectedAnswer?.selectedOption === option && (
                         <CheckCircle className="h-4 w-4 text-[#5a4bda]" />
                       )}
                     </div>
@@ -267,6 +287,12 @@ const Test = () => {
                 : "Next Question"}
             </Button>
           </div>
+          {isSubmitted && (
+            <div className="bg-black/50 absolute rounded-md inset-0 gap-1 flex justify-center flex-col items-center">
+              <Loader />
+              <span>Your submission is being processed</span>
+            </div>
+          )}
         </div>
       </div>
     </div>
