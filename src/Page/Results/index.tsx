@@ -40,30 +40,90 @@ import { useGetUserDetails } from "../../hooks/useGetUserDetails";
 import { useEffect, useState } from "react";
 import { useGetTestSubmission } from "../../hooks/useGetTestSubmission";
 import axios from "axios";
-// import axios from "axios";
 
 import RoadmapComponent from "../../components/ui/roadmap";
 
+interface Topic {
+  topic: string;
+  accuracy: number;
+  avgTime: number;
+}
+
+interface SubjectData {
+  level: string;
+  accuracy: number;
+  avgTime: number;
+  topperAccuracy: number;
+  topperAvgTime: number;
+  strongTopics: Topic[];
+  weakTopics: Topic[];
+  total: number;
+  correct: number;
+}
+
+interface InputData {
+  [key: string]: SubjectData;
+}
+
+interface ExtractedSubjects {
+  strongSubjects: { [key: string]: string[] };
+  weakSubjects: { [key: string]: string[] };
+}
+
 const Results = () => {
+  const [isLoadingRoadMap, setIsLoadingRoadMap] = useState(true);
+  const [roadmapData, setRoadmapData] = useState<any[]>([]);
   const userDetail = useGetUserDetails();
   const testSubmission = useGetTestSubmission();
+  console.log("testSubmission: ", testSubmission);
   const [topTwoBatches, setTopTwoBatches] = useState<any[]>([]);
   const [selectedBatch, setSelectedBatch] = useState<any | null>(null);
   const [plans, setPlans] = useState<any[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<any | null>(null);
+
+  const extractTopicNames = (data: InputData): ExtractedSubjects => {
+    console.log("data:== ", data);
+    return Object.entries(data).reduce(
+      (acc, [subject, subjectData]) => {
+        const subjectName = subject.charAt(0).toUpperCase() + subject.slice(1);
+
+        acc.strongSubjects[subjectName] = subjectData.strongTopics.map(
+          (topic) => topic.topic
+        );
+        acc.weakSubjects[subjectName] = subjectData.weakTopics.map(
+          (topic) => topic.topic
+        );
+
+        return acc;
+      },
+      { strongSubjects: {}, weakSubjects: {} } as ExtractedSubjects
+    );
+  };
+
   const fetchRoadMap = async () => {
-    // const res = await axios.post(
-    //   "https://6aa2-2401-4900-1cd7-7f78-e9d0-624b-1cb8-23f6.ngrok-free.app/test-mettle/get-roadmap",
-    //   {
-    //     classes: "11",
-    //     exam: "IIT-JEE",
-    //     duration: 3,
-    //     durationType: "Week",
-    //     scoredMarks: 55,
-    //     totalMarks: 100,
-    //     prepLevel: "Beginner",
-    //   }
-    // );
+    const res = await axios.post(
+      "https://stage-api.penpencil.co/batch-service/test-mettle/get-roadmap",
+      {
+        classes: userDetail?.class,
+        exam: userDetail?.exam[0],
+        duration: 6,
+        durationType: "Week",
+        strongSubjects: extractTopicNames(testSubmission?.subjects)
+          ?.strongSubjects,
+        weakSubjects: extractTopicNames(testSubmission?.subjects)?.weakSubjects,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${userDetail?.token}`,
+        },
+      }
+    );
+
+    const roadmapData = res.data?.data?.roadmap || [];
+    console.log("res.data: ", res.data);
+    console.log("roadmapData: ", roadmapData);
+    setRoadmapData(roadmapData);
+    setIsLoadingRoadMap(false);
   };
   const fetchBatches = async () => {
     const response = await axios.get(
@@ -481,7 +541,10 @@ const Results = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <RoadmapComponent />
+              <RoadmapComponent
+                isLoading={isLoadingRoadMap}
+                roadmapData={roadmapData}
+              />
             </CardContent>
           </Card>
 
@@ -542,7 +605,7 @@ const Results = () => {
                         </div>
                         <div>
                           <ul className="space-y-2">
-                            {batch.features.map((feature:any, i:any) => (
+                            {batch.features.map((feature: any, i: any) => (
                               <li
                                 key={i}
                                 className="flex items-center space-x-2"

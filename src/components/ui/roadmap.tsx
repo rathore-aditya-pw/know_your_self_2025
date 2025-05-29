@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useState, type FC } from "react";
 import {
   ChevronDown,
   ChevronRight,
   Calendar,
   BookOpen,
   Target,
+  Video,
 } from "lucide-react";
-import { roadmap } from "../../lib/constants";
+import Loader from "./loader";
+import { topicVideos } from "../../lib/videos";
 
-const RoadmapComponent = () => {
+interface props {
+  roadmapData: any;
+  isLoading: boolean;
+}
+
+const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
+  console.log("roadmapData: ", roadmapData);
   const [expandedWeeks, setExpandedWeeks] = useState<number[]>([]);
   const [expandedSubjects, setExpandedSubjects] = useState<{
     [key: string]: boolean;
@@ -144,10 +152,46 @@ const RoadmapComponent = () => {
     return colors[(weekIndex * 3 + subjectIndex) % colors.length];
   };
 
+  const handleVideoClick = (topic: string): string => {
+    const directMatch = (topicVideos as any)[topic];
+
+    if (directMatch) {
+      console.log("Exact match found:", directMatch);
+      return directMatch;
+    }
+
+    const lowerTopic = topic.toLowerCase();
+    const bestMatch = Object.entries(topicVideos).find(([key]) =>
+      lowerTopic.includes(key.toLowerCase())
+    );
+
+    if (bestMatch) {
+      console.log("Partial match found:", bestMatch[1]);
+      return bestMatch[1];
+    }
+
+    const videoLinks = Object.values(topicVideos);
+    const randomLink =
+      videoLinks[Math.floor(Math.random() * videoLinks.length)];
+
+    window.open(randomLink, "_blank");
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex relative h-[200px] rounded-md flex-col gap-3">
+        <div className="absolute inset-0 rounded-md flex flex-col gap-2 justify-center items-center bg-black/10">
+          <Loader />
+          <span className="text-lg">Building your personalized roadmap...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-gray-50 to-white min-h-screen">
       <div className="space-y-6">
-        {roadmap.map((week, weekIndex) => (
+        {roadmapData.map((week: any, weekIndex: number) => (
           <div
             key={weekIndex}
             className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl"
@@ -187,7 +231,7 @@ const RoadmapComponent = () => {
             {/* Week Content */}
             {expandedWeeks.includes(weekIndex) && (
               <div className="p-6 space-y-4 animate-in slide-in-from-top duration-300">
-                {week.focus.map((subject, subjectIndex) => {
+                {week.focus.map((subject: any, subjectIndex: number) => {
                   const subjectName = Object.values(subject)[0];
                   const topics = subject.topics;
                   const key = `${weekIndex}-${subjectIndex}`;
@@ -212,7 +256,7 @@ const RoadmapComponent = () => {
                               <h3
                                 className={`font-semibold ${colors.text} text-lg`}
                               >
-                                {subjectName}
+                                {subjectName as string}
                               </h3>
                               <p className="text-sm text-gray-500">
                                 {topics.length} topic
@@ -240,7 +284,7 @@ const RoadmapComponent = () => {
                       {expandedSubjects[key] && (
                         <div className="px-4 pb-4 animate-in slide-in-from-top duration-200">
                           <div className="space-y-3">
-                            {topics.map((topic, topicIndex) => (
+                            {topics.map((topic: any, topicIndex: number) => (
                               <div
                                 key={topicIndex}
                                 className="bg-white rounded-lg p-4 border border-gray-100 hover:border-gray-200 transition-all duration-200 hover:shadow-sm"
@@ -250,8 +294,13 @@ const RoadmapComponent = () => {
                                     <Target className="w-4 h-4 text-gray-600" />
                                   </div>
                                   <div className="flex-1">
-                                    <h4 className="font-medium text-gray-900 mb-1">
-                                      {topic.topic}
+                                    <h4
+                                      onClick={() =>
+                                        handleVideoClick(topic?.topic)
+                                      }
+                                      className="font-medium flex items-center cursor-pointer gap-1 text-gray-900 mb-1"
+                                    >
+                                      <Video size={20} /> {topic.topic}
                                     </h4>
                                     <p className="text-gray-600 text-sm leading-relaxed">
                                       {topic.Description}
