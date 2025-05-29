@@ -152,7 +152,7 @@ const RoadmapComponent: FC<props> = ({ isLoading, roadmapData }) => {
     return colors[(weekIndex * 3 + subjectIndex) % colors.length];
   };
 
-  const handleVideoClick = (topic: string): string => {
+  const handleVideoClick = (topic: string) => {
     const directMatch = (topicVideos as any)[topic];
 
     if (directMatch) {

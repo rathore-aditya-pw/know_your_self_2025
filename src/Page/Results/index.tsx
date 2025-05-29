@@ -17,13 +17,9 @@ import {
   ArrowRight,
   Users,
   TrendingUp,
-  PlayCircle,
-  FileText,
   Share2,
-  Lock,
   Crown,
   Zap,
-  Brain,
   Calculator,
   Atom,
 } from "lucide-react";
@@ -231,44 +227,6 @@ const Results = () => {
     score: data.score,
     topperAvg: data.topperAvgTime,
   }));
-
-  const weeklyRoadmap = [
-    {
-      week: 1,
-      title: "Foundation Strengthening",
-      focus: "Concept Clarity & Basic Problem Solving",
-      videos: [
-        "Kinematics Basics",
-        "Organic Chemistry Fundamentals",
-        "Coordinate Geometry",
-      ],
-      practice: ["50 Basic Problems", "Formula Revision", "Concept Maps"],
-      tests: ["Weekly Assessment 1", "Subject-wise Mini Tests"],
-      free: true,
-    },
-    {
-      week: 2,
-      title: "Application Development",
-      focus: "Advanced Problem Solving",
-      videos: [
-        "Complex Problem Strategies",
-        "Time Management",
-        "Error Analysis",
-      ],
-      practice: ["100 Medium Level Problems", "Previous Year Questions"],
-      tests: ["Mock Test 1", "Speed Test Series"],
-      free: false,
-    },
-    {
-      week: 3,
-      title: "Speed Enhancement",
-      focus: "Time Management & Accuracy",
-      videos: ["Quick Solving Techniques", "Formula Shortcuts"],
-      practice: ["Timed Practice Sessions", "Error Log Maintenance"],
-      tests: ["Full Length Mock", "Subject-wise Tests"],
-      free: false,
-    },
-  ];
 
   const improvement = performanceParams.filter(
     (param: any) => param.score < 75
