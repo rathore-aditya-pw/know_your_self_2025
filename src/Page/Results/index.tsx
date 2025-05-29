@@ -37,13 +37,18 @@ import {
   Radar,
 } from "recharts";
 import { useGetUserDetails } from "../../hooks/useGetUserDetails";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useGetTestSubmission } from "../../hooks/useGetTestSubmission";
+import axios from "axios";
 // import axios from "axios";
 
 const Results = () => {
+  const userDetail = useGetUserDetails();
   const testSubmission = useGetTestSubmission();
-  console.log("testSubmission: ", testSubmission);
+  const [topTwoBatches, setTopTwoBatches] = useState<any[]>([]);
+  const [selectedBatch, setSelectedBatch] = useState<any | null>(null);
+  const [plans, setPlans] = useState<any[]>([]);
+  const [selectedPlan, setSelectedPlan] = useState<any | null>(null);
   const fetchRoadMap = async () => {
     // const res = await axios.post(
     //   "https://6aa2-2401-4900-1cd7-7f78-e9d0-624b-1cb8-23f6.ngrok-free.app/test-mettle/get-roadmap",
@@ -58,10 +63,83 @@ const Results = () => {
     //   }
     // );
   };
+  const fetchBatches = async () => {
+    const response = await axios.get(
+      `https://stage-api.penpencil.co/v1/cohort/${userDetail?.cohortId}/batches`,
+      {
+        params: {
+          page: 1,
+          version: 2,
+          filter: true,
+          tag: "online",
+        },
+        headers: {
+          Authorization: `Bearer ${userDetail?.token}`,
+          "Content-Type": "application/json",
+          "X-Client-Id": "penpencil-web",
+          "X-Client-Version": "1.0.0",
+          "X-User-Id": userDetail?.userId,
+        },
+      }
+    );
+
+    const fullData = response.data;
+    const topTwo = fullData.data.slice(0, 2);
+
+    const enrichedBatches: any[] = topTwo.map((item: any, index: number) => ({
+      batchId: item.batchId,
+      recommended: index === 0,
+      features:
+        index === 0
+          ? [
+              "Live Classes",
+              "Doubt Resolution",
+              "Test Series",
+              "Study Material",
+            ]
+          : [
+              "Recorded Lectures",
+              "Practice Tests",
+              "Mentorship",
+              "Study Material",
+            ],
+    }));
+    setTopTwoBatches(enrichedBatches);
+    setSelectedBatch(enrichedBatches[0]);
+  };
+
+  const fetchPlans = async () => {
+    const response = await axios.get(
+      `https://stage-api.penpencil.co/batch-service/v2/batch-plans/${selectedBatch.batchId._id}/compare-plans
+`,
+      {
+        headers: {
+          Authorization: `Bearer ${userDetail?.token}`,
+          "Content-Type": "application/json",
+          "X-Client-Id": "penpencil-web",
+          "X-Client-Version": "1.0.0",
+          "X-User-Id": userDetail?.userId,
+        },
+      }
+    );
+
+    const plansData = response.data?.data?.plans || [];
+    setPlans(plansData);
+    setSelectedPlan(plansData[0]);
+    console.log("Fetched Plans:", plansData);
+  };
 
   useEffect(() => {
     fetchRoadMap();
+    fetchBatches();
   }, []);
+
+  useEffect(() => {
+    if (selectedBatch) {
+      fetchPlans();
+    }
+  }, [selectedBatch]);
+
   const score = testSubmission?.overall?.correctQuestions || 0;
   const total = testSubmission?.availableQuestion || 10;
 
@@ -129,32 +207,6 @@ const Results = () => {
       free: false,
     },
   ];
-
-  const pwBatches = [
-    {
-      name: "Arjuna JEE 2025",
-      price: "₹15,999",
-      duration: "12 Months",
-      features: [
-        "Live Classes",
-        "Doubt Resolution",
-        "Test Series",
-        "Study Material",
-      ],
-      recommended: true,
-      discount: "30% OFF",
-    },
-    {
-      name: "Lakshya JEE 2026",
-      price: "₹12,999",
-      duration: "6 Months",
-      features: ["Recorded Lectures", "Practice Tests", "Mentorship"],
-      recommended: false,
-      discount: "25% OFF",
-    },
-  ];
-
-  const userDetail = useGetUserDetails();
 
   const improvement = performanceParams.filter(
     (param: any) => param.score < 75
@@ -531,49 +583,68 @@ const Results = () => {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-6">
-                {pwBatches.map((batch, index) => (
-                  <div
-                    key={index}
-                    className={`p-6 rounded-lg border-2 ${
-                      batch.recommended
-                        ? "border-yellow-300 bg-white/10"
-                        : "border-white/30 bg-white/5"
-                    } relative`}
-                  >
-                    {batch.recommended && (
-                      <Badge className="absolute -top-2 left-4 bg-yellow-500 text-black">
-                        Recommended
-                      </Badge>
-                    )}
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="text-xl font-bold">{batch.name}</h3>
-                        <div className="flex items-center space-x-4 mt-2">
-                          <span className="text-2xl font-bold">
-                            {batch.price}
-                          </span>
-                          <Badge className="bg-green-500 text-white">
-                            {batch.discount}
-                          </Badge>
+                {topTwoBatches.map((batch, index) => {
+                  const isSelected =
+                    selectedBatch?.batchId._id === batch.batchId._id;
+
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => setSelectedBatch(batch)}
+                      className={`p-6 rounded-lg border-2 cursor-pointer ${
+                        isSelected
+                          ? "border-yellow-300 bg-white/10"
+                          : "border-white/30 bg-white/5"
+                      } relative`}
+                    >
+                      {batch.recommended && (
+                        <Badge className="absolute -top-2 left-4 bg-yellow-500 text-black">
+                          Recommended
+                        </Badge>
+                      )}
+                      <div className="space-y-4">
+                        <div>
+                          <h3 className="text-xl font-bold">
+                            {batch.batchId.name}
+                          </h3>
+                          <div className="flex items-center space-x-4 mt-2">
+                            <span className="text-2xl font-bold">
+                              ₹{batch.batchId.feeId.amount}
+                            </span>
+                            <Badge className="bg-green-500 text-white">
+                              {batch.batchId.feeId.discount}% OFF
+                            </Badge>
+                          </div>
+                          <p className="text-brand-50">
+                            {new Date(
+                              batch.batchId.startDate
+                            ).toLocaleDateString()}{" "}
+                            -{" "}
+                            {new Date(
+                              batch.batchId.endDate
+                            ).toLocaleDateString()}
+                          </p>
                         </div>
-                        <p className="text-brand-50">{batch.duration}</p>
+                        <div>
+                          <ul className="space-y-2">
+                            {batch.features.map((feature:any, i:any) => (
+                              <li
+                                key={i}
+                                className="flex items-center space-x-2"
+                              >
+                                <CheckCircle className="h-4 w-4 text-green-400" />
+                                <span className="text-sm">{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <Button className="w-full bg-white text-brand-500 hover:bg-gray-100">
+                          Enroll Now
+                        </Button>
                       </div>
-                      <div>
-                        <ul className="space-y-2">
-                          {batch.features.map((feature, i) => (
-                            <li key={i} className="flex items-center space-x-2">
-                              <CheckCircle className="h-4 w-4 text-green-400" />
-                              <span className="text-sm">{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <Button className="w-full bg-white text-brand-500 hover:bg-gray-100">
-                        Enroll Now
-                      </Button>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
@@ -591,29 +662,36 @@ const Results = () => {
                 your JEE journey
               </p>
 
-              <div className="grid md:grid-cols-3 gap-4">
-                <div className="p-4 bg-white/10 rounded-lg">
-                  <h3 className="font-bold">3 Months</h3>
-                  <p className="text-2xl font-bold">₹2,999</p>
-                  <p className="text-sm text-green-100">
-                    Perfect for quick revision
-                  </p>
-                </div>
-                <div className="p-4 bg-white/20 rounded-lg border-2 border-yellow-300">
-                  <Badge className="bg-yellow-500 text-black mb-2">
-                    Most Popular
-                  </Badge>
-                  <h3 className="font-bold">6 Months</h3>
-                  <p className="text-2xl font-bold">₹4,999</p>
-                  <p className="text-sm text-green-100">
-                    Comprehensive preparation
-                  </p>
-                </div>
-                <div className="p-4 bg-white/10 rounded-lg">
-                  <h3 className="font-bold">12 Months</h3>
-                  <p className="text-2xl font-bold">₹7,999</p>
-                  <p className="text-sm text-green-100">Complete mastery</p>
-                </div>
+              <div className="flex flex-wrap justify-center gap-6">
+                {plans.map((plan) => {
+                  const isSelected = selectedPlan?._id === plan._id;
+
+                  return (
+                    <div
+                      key={plan._id}
+                      onClick={() => setSelectedPlan(plan)}
+                      className={`p-4 rounded-lg cursor-pointer border-2 transition-all w-80 ${
+                        isSelected
+                          ? "border-yellow-300 bg-white/20"
+                          : "border-white/10 bg-white/10"
+                      }`}
+                    >
+                      {plan.isBest && (
+                        <Badge className="bg-yellow-500 text-black mb-2">
+                          Most Popular
+                        </Badge>
+                      )}
+
+                      <h3 className="font-bold">{plan.title}</h3>
+                      <p className="text-2xl font-bold">
+                        ₹{plan.priceAfterDiscount}
+                      </p>
+                      <p className="text-sm text-green-100">
+                        Monthly: ₹{plan.pricePerMonth || plan.price}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
