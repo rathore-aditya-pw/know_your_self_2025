@@ -189,11 +189,12 @@ const Test = () => {
   const navigate = useNavigate();
   const goal = searchParams.get("goal") || "";
   const level = searchParams.get("level") || "";
+  const durationInSeconds = searchParams.get("duration") || 900;
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [answers, setAnswers] = useState<number[]>([]);
-  const [timeLeft, setTimeLeft] = useState(900); // 15 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(Number(durationInSeconds));
   // const [isSubmitted, setIsSubmitted] = useState(false);
 
   const questions = questionBank?.[level as keyof typeof questionBank] || [];

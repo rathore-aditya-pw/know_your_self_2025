@@ -50,7 +50,6 @@ const Results = () => {
 
   const percentage = Math.round((score / total) * 100);
 
-  // Mock data for JEE performance analysis
   const subjectPerformance = [
     { subject: "Physics", score: 78, topperAvg: 92, color: "#8b5cf6" },
     { subject: "Chemistry", score: 72, topperAvg: 88, color: "#06b6d4" },
