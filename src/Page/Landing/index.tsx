@@ -392,18 +392,18 @@ const Landing = () => {
 
       {/* Final CTA */}
       <section className="container mx-auto px-4 py-16">
-        <div className="bg-gradient-to-r from-[#6a5ff0] to-[#4a3cbf] rounded-3xl p-12 text-center text-white">
-          <h3 className="text-3xl font-bold mb-4">
+        <div className="bg-gradient-to-r from-[#6a5ff0] to-[#4a3cbf] rounded-3xl p-6 md:p-12 text-center text-white">
+          <h3 className="text-2xl md:text-3xl font-bold mb-4">
             Ready to Discover Your Potential?
           </h3>
-          <p className="text-xl mb-8 opacity-90">
+          <p className="text-lg md:text-xl mb-8 opacity-90">
             Join thousands of learners who have transformed their careers with
             SkillTest Pro
           </p>
           <Link to="/test-selection">
             <Button
               size="lg"
-              className="bg-white text-[#5a4bda] hover:bg-gray-100 px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="bg-white text-[#5a4bda] hover:bg-gray-100 px-4 md:px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
               Start Your Free Assessment
             </Button>

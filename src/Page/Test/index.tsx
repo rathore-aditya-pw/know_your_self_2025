@@ -298,7 +298,7 @@ const Test = () => {
       {/* Header */}
       <header className="bg-white/70 backdrop-blur-sm shadow-sm">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row gap-2 items-center justify-between">
             <div className="flex items-center space-x-4">
               <h1 className="text-xl font-bold text-gray-800">
                 {goal.charAt(0).toUpperCase() + goal.slice(1)} Test -{" "}
@@ -311,7 +311,9 @@ const Test = () => {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2 text-gray-600">
                 <Clock className="h-4 w-4" />
-                <span className="font-mono">{formatTime(timeLeft)}</span>
+                <span className="font-mono text-sm">
+                  {formatTime(timeLeft)}
+                </span>
               </div>
               <Button variant="outline" onClick={handleSubmitTest}>
                 Submit Test
@@ -328,17 +330,16 @@ const Test = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <Card className="bg-white/70 backdrop-blur-sm shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-2xl mb-4">
+            <CardHeader className="p-4 md:p-6">
+              <CardTitle className="text-xl md:text-2xl mb-4">
                 {currentQ.question}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 px-4 md:px-6 pt-0">
               {currentQ.options.map((option, index) => (
-                <Button
+                <div
                   key={index}
-                  variant={selectedAnswer === index ? "default" : "outline"}
-                  className={`w-full p-6 text-left justify-start h-auto ${
+                  className={`w-full p-2 border border-[#e1e1e1]  cursor-pointer  md:p-6 rounded-md text-left justify-start h-auto ${
                     selectedAnswer === index
                       ? "bg-[#5a4bda] hover:bg-[#4a3cbf] text-white"
                       : "hover:bg-[#ebe9fd]"
@@ -347,7 +348,7 @@ const Test = () => {
                 >
                   <div className="flex items-center space-x-3">
                     <div
-                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                      className={`w-5 h-5 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center ${
                         selectedAnswer === index
                           ? "border-white bg-white"
                           : "border-gray-400"
@@ -357,9 +358,9 @@ const Test = () => {
                         <CheckCircle className="h-4 w-4 text-[#5a4bda]" />
                       )}
                     </div>
-                    <span className="text-base">{option}</span>
+                    <div className="text-sm w-[calc(100%-24px)]">{option}</div>
                   </div>
-                </Button>
+                </div>
               ))}
             </CardContent>
           </Card>

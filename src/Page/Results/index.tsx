@@ -39,11 +39,8 @@ import {
 } from "recharts";
 import { useEffect, useState } from "react";
 
-
-
-
 const Results = () => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const [searchParams] = useSearchParams();
   // const goal = searchParams.get("goal") || "programming";
   // const level = searchParams.get("level") || "beginner";
@@ -138,7 +135,7 @@ const Results = () => {
   ];
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const nameFromUrl = params.get('username');
+    const nameFromUrl = params.get("username");
     if (nameFromUrl) {
       setUsername(nameFromUrl);
     }
@@ -149,7 +146,7 @@ const Results = () => {
       {/* Header */}
       <header className="bg-white/70 backdrop-blur-sm shadow-sm border-b border-brand-200">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-800">
                 User name {username}
@@ -536,7 +533,7 @@ const Results = () => {
           </Card>
 
           {/* Free Trial Conversion */}
-          <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white shadow-xl">
+          <Card className="bg-gradient-to-r bg-[#1b2124] text-white shadow-xl">
             <CardHeader>
               <CardTitle className="text-2xl text-center">
                 🎯 Unlock Your Full Potential
@@ -574,12 +571,12 @@ const Results = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button className="bg-white text-green-600 hover:bg-gray-100 px-8 py-3">
+                <Button className="bg-white text-[#1b2124] hover:bg-gray-100 px-8 py-3">
                   Start Free Trial
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-green-600 px-8 py-3"
+                  className="border-white text-white hover:bg-white hover:text-[#1b2124] px-8 py-3"
                 >
                   View All Plans
                 </Button>
@@ -598,9 +595,9 @@ const Results = () => {
                 <p className="text-gray-600">
                   See how you stack up against your study group
                 </p>
-                <div className="flex justify-center space-x-4">
+                <div className="flex flex-col gap-2 md:flex-row justify-center">
                   <Button className="text-white bg-brand-500 hover:bg-brand-600">
-                    <Share2 className="h-4 w-4 mr-2" />
+                    <Share2 className="h-4 w-4" />
                     Share Test Link
                   </Button>
                   <Button

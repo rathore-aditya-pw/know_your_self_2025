@@ -103,18 +103,18 @@ const TestSelection = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50">
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-col md:flex-row md:items-center space-x-4">
           <Link to="/">
             <Button
               variant="ghost"
               size="sm"
-              className="flex items-center space-x-2"
+              className="flex justify-start items-center space-x-2"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>Back to Home</span>
             </Button>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-800">Choose Your Test</h1>
+          <h1 className="text-2xl font-bold text-center text-gray-800">Choose Your Test</h1>
         </div>
       </header>
 
