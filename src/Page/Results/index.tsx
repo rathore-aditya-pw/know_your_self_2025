@@ -38,25 +38,23 @@ import {
   Radar,
 } from "recharts";
 import { useGetUserDetails } from "../../hooks/useGetUserDetails";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+// import axios from "axios";
 
 const Results = () => {
-  const [roadmap, setRoadmap] = useState();
-
   const fetchRoadMap = async () => {
-    const res = await axios.post(
-      "https://6aa2-2401-4900-1cd7-7f78-e9d0-624b-1cb8-23f6.ngrok-free.app/test-mettle/get-roadmap",
-      {
-        classes: "11",
-        exam: "IIT-JEE",
-        duration: 3,
-        durationType: "Week",
-        scoredMarks: 55,
-        totalMarks: 100,
-        prepLevel: "Beginner",
-      }
-    );
+    // const res = await axios.post(
+    //   "https://6aa2-2401-4900-1cd7-7f78-e9d0-624b-1cb8-23f6.ngrok-free.app/test-mettle/get-roadmap",
+    //   {
+    //     classes: "11",
+    //     exam: "IIT-JEE",
+    //     duration: 3,
+    //     durationType: "Week",
+    //     scoredMarks: 55,
+    //     totalMarks: 100,
+    //     prepLevel: "Beginner",
+    //   }
+    // );
   };
 
   useEffect(() => {
